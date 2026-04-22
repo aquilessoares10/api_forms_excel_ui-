@@ -1,722 +1,127 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bike Store — Contato & Pedido</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --preto:    #0a0a0a;
-      --branco:   #f5f2eb;
-      --verde:    #009c3b;
-      --verde-dk: #006828;
-      --amarelo:  #f5c800;
-      --cinza:    #1c1c1c;
-      --cinza-md: #2e2e2e;
-      --cinza-lt: #444;
-      --borda:    rgba(245,200,0,0.25);
-      --fonte-hd: 'Bebas Neue', sans-serif;
-      --fonte-bd: 'DM Sans', sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--preto);
-      color: var(--branco);
-      font-family: var(--fonte-bd);
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* ── background texture ── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background-image:
-        repeating-linear-gradient(90deg, transparent 0, transparent 59px, rgba(255,255,255,0.015) 60px),
-        repeating-linear-gradient(0deg,  transparent 0, transparent 59px, rgba(255,255,255,0.015) 60px);
-      pointer-events: none;
-    }
-
-    /* ── diagonal accent bar ── */
-    .accent-bar {
-      position: fixed; top: 0; right: 0;
-      width: 6px; height: 100vh;
-      background: linear-gradient(to bottom, var(--amarelo), var(--verde));
-      z-index: 10;
-    }
-
-    /* ── layout wrapper ── */
-    .wrapper {
-      position: relative; z-index: 1;
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 24px 80px;
-    }
-
-    /* ── header ── */
-    header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 48px 0 32px;
-      border-bottom: 1px solid var(--borda);
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .logo-area { display: flex; align-items: center; gap: 14px; }
-
-    .logo-icon {
-      width: 52px; height: 52px;
-      background: var(--amarelo);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .logo-icon svg { width: 28px; height: 28px; }
-
-    .logo-text h1 {
-      font-family: var(--fonte-hd);
-      font-size: 32px;
-      letter-spacing: 2px;
-      color: var(--branco);
-      line-height: 1;
-    }
-
-    .logo-text p {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--amarelo);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .header-tag {
-      background: var(--verde);
-      color: var(--branco);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      border-radius: 2px;
-    }
-
-    /* ── hero title ── */
-    .page-title {
-      padding: 48px 0 0;
-    }
-
-    .page-title .eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--verde);
-      margin-bottom: 10px;
-    }
-
-    .page-title h2 {
-      font-family: var(--fonte-hd);
-      font-size: clamp(56px, 10vw, 88px);
-      line-height: 0.92;
-      letter-spacing: 1px;
-      color: var(--branco);
-    }
-
-    .page-title h2 span { color: var(--amarelo); }
-
-    .page-title p {
-      margin-top: 18px;
-      font-size: 15px;
-      color: rgba(245,242,235,0.55);
-      max-width: 420px;
-      line-height: 1.7;
-    }
-
-    /* ── form card ── */
-    .form-card {
-      margin-top: 48px;
-      background: var(--cinza);
-      border: 1px solid var(--borda);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .form-section-label {
-      background: var(--cinza-md);
-      padding: 10px 28px;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--amarelo);
-      border-bottom: 1px solid var(--borda);
-    }
-
-    .form-body { padding: 28px 28px 0; }
-
-    /* ── field groups ── */
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .row.full { grid-template-columns: 1fr; }
-
-    .field { display: flex; flex-direction: column; gap: 7px; }
-
-    label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(245,242,235,0.5);
-    }
-
-    label .req { color: var(--verde); margin-left: 2px; }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    select,
-    textarea {
-      background: var(--preto);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 3px;
-      color: var(--branco);
-      font-family: var(--fonte-bd);
-      font-size: 14px;
-      padding: 12px 16px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      width: 100%;
-      -webkit-appearance: none;
-    }
-
-    input::placeholder, textarea::placeholder { color: rgba(245,242,235,0.2); }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--amarelo);
-      box-shadow: 0 0 0 3px rgba(245,200,0,0.1);
-    }
-
-    select {
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f5c800' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 38px;
-    }
-
-    select option { background: var(--cinza); }
-
-    textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
-
-    /* ── bike type selector ── */
-    .bike-types {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .bike-type-btn {
-      background: var(--preto);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 3px;
-      padding: 14px 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.18s;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 7px;
-    }
-
-    .bike-type-btn:hover {
-      border-color: rgba(245,200,0,0.4);
-      background: rgba(245,200,0,0.05);
-    }
-
-    .bike-type-btn.active {
-      border-color: var(--amarelo);
-      background: rgba(245,200,0,0.08);
-    }
-
-    .bike-type-btn .bt-icon { font-size: 22px; }
-
-    .bike-type-btn .bt-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: rgba(245,242,235,0.5);
-      transition: color 0.18s;
-    }
-
-    .bike-type-btn.active .bt-label { color: var(--amarelo); }
-
-    /* ── rating stars ── */
-    .star-row {
-      display: flex; gap: 6px; margin-bottom: 4px;
-    }
-
-    .star {
-      width: 36px; height: 36px;
-      background: var(--preto);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; cursor: pointer;
-      transition: all 0.15s;
-      color: rgba(245,242,235,0.2);
-    }
-
-    .star:hover, .star.lit { color: var(--amarelo); border-color: var(--amarelo); background: rgba(245,200,0,0.07); }
-
-    /* ── divider ── */
-    .form-divider {
-      border: none;
-      border-top: 1px solid var(--borda);
-      margin: 28px 0;
-    }
-
-    /* ── checkbox row ── */
-    .check-row {
-      display: flex; align-items: flex-start; gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .check-row input[type="checkbox"] {
-      width: 18px; height: 18px; flex-shrink: 0;
-      accent-color: var(--verde);
-      margin-top: 2px; cursor: pointer;
-    }
-
-    .check-row span {
-      font-size: 13px;
-      color: rgba(245,242,235,0.5);
-      line-height: 1.6;
-    }
-
-    .check-row a { color: var(--verde); text-decoration: none; }
-    .check-row a:hover { text-decoration: underline; }
-
-    /* ── footer bar ── */
-    .form-footer {
-      background: var(--cinza-md);
-      border-top: 1px solid var(--borda);
-      padding: 20px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn-reset {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(245,242,235,0.4);
-      font-family: var(--fonte-bd);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 11px 20px;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-
-    .btn-reset:hover { border-color: rgba(255,255,255,0.3); color: var(--branco); }
-
-    .btn-submit {
-      background: var(--verde);
-      border: none;
-      color: var(--branco);
-      font-family: var(--fonte-hd);
-      font-size: 20px;
-      letter-spacing: 2px;
-      padding: 12px 36px;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex; align-items: center; gap: 10px;
-    }
-
-    .btn-submit:hover {
-      background: var(--verde-dk);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(0,156,59,0.3);
-    }
-
-    .btn-submit:active { transform: scale(0.98); }
-
-    .btn-submit svg { width: 18px; height: 18px; }
-
-    /* ── success screen ── */
-    .success-screen {
-      display: none;
-      padding: 64px 28px;
-      text-align: center;
-    }
-
-    .success-icon {
-      width: 72px; height: 72px;
-      background: var(--verde);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px;
-    }
-
-    .success-icon svg { width: 32px; height: 32px; color: white; }
-
-    .success-screen h3 {
-      font-family: var(--fonte-hd);
-      font-size: 48px;
-      letter-spacing: 2px;
-      color: var(--branco);
-      line-height: 1;
-    }
-
-    .success-screen h3 span { color: var(--amarelo); }
-
-    .success-screen p {
-      margin-top: 14px;
-      font-size: 15px;
-      color: rgba(245,242,235,0.5);
-      line-height: 1.7;
-    }
-
-    .btn-novo {
-      margin-top: 28px;
-      display: inline-block;
-      background: transparent;
-      border: 1px solid var(--borda);
-      color: var(--amarelo);
-      font-family: var(--fonte-bd);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 12px 24px;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-
-    .btn-novo:hover { background: rgba(245,200,0,0.08); }
-
-    /* ── error state ── */
-    .field.error input,
-    .field.error select,
-    .field.error textarea {
-      border-color: #e74c3c;
-      box-shadow: 0 0 0 3px rgba(231,76,60,0.12);
-    }
-
-    .error-msg {
-      font-size: 11px;
-      color: #e74c3c;
-      margin-top: 4px;
-      display: none;
-      font-weight: 500;
-    }
-
-    .field.error .error-msg { display: block; }
-
-    /* ── responsive ── */
-    @media (max-width: 560px) {
-      .row { grid-template-columns: 1fr; }
-      .bike-types { grid-template-columns: repeat(2, 1fr); }
-      header { flex-direction: column; align-items: flex-start; }
-      .form-footer { flex-direction: column-reverse; }
-      .btn-submit { width: 100%; justify-content: center; }
-      .btn-reset { width: 100%; text-align: center; }
-    }
-
-    /* ── entrance animation ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    header, .page-title, .form-card {
-      animation: fadeUp 0.5s ease both;
-    }
-    .page-title { animation-delay: 0.08s; }
-    .form-card   { animation-delay: 0.16s; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Loja de Bicicletas (Copa Edition)</title>
+    <style>
+        :root {
+            --verde-copa: #009739;
+            --amarelo-copa: #FFDF00;
+            --azul-copa: #002776;
+            --branco: #ffffff;
+            --cinza-claro: #f4f4f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cinza-claro);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .form-container {
+            background: var(--branco);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--verde-copa);
+        }
+
+        .header-image {
+            width: 100%;
+            height: 180px;
+            background: var(--azul-copa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--amarelo-copa);
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background-image: linear-gradient(rgba(0,39,118,0.7), rgba(0,39,118,0.7)), url('https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80&w=600');
+            background-size: cover;
+        }
+
+        .content { padding: 30px; }
+        h1 { color: var(--azul-copa); font-size: 22px; margin-bottom: 10px; }
+        .question { margin-bottom: 25px; }
+        .question label { display: block; font-weight: bold; margin-bottom: 10px; color: #333; }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background-color: var(--verde-copa);
+            color: var(--branco);
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="accent-bar"></div>
-
-<div class="wrapper">
-
-  <!-- ── Header ── -->
-  <header>
-    <div class="logo-area">
-      <div class="logo-icon">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="7" cy="19" r="5" stroke="#0a0a0a" stroke-width="2.2" fill="none"/>
-          <circle cx="21" cy="19" r="5" stroke="#0a0a0a" stroke-width="2.2" fill="none"/>
-          <circle cx="7"  cy="19" r="1.5" fill="#0a0a0a"/>
-          <circle cx="21" cy="19" r="1.5" fill="#0a0a0a"/>
-          <path d="M7 19 L13 7 L19 7 L21 19" stroke="#0a0a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <path d="M13 7 L10 19" stroke="#0a0a0a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <path d="M18 4 L22 4 L19 7" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="logo-text">
-        <h1>Bike Store</h1>
-        <p>Pedale com estilo</p>
-      </div>
+<div class="form-container">
+    <div class="header-image">
+        Rumo ao Hexa com a Bicicleta do Brasil! ⚽🚴
     </div>
-    <span class="header-tag">Formulário</span>
-  </header>
+    
+    <div class="content">
+        <h1>Avaliação da Experiência</h1>
+        
+        <form action="https://docs.google.com/forms/d/e/1FAIpQLSdEjvxOEOD1wQ27fqe4JG6eXhhxx4FKX2re0qKBTX-Z_O2wjg/formResponse" method="POST">
+            
+            <div class="question">
+                <label>Nome do Ciclista</label>
+                <input type="text" name="entry.52746291" placeholder="Ex: EXEMPLO_NOME" required>
+            </div>
 
-  <!-- ── Page title ── -->
-  <div class="page-title">
-    <p class="eyebrow">// Entre em contato</p>
-    <h2>FALE COM<br><span>A GENTE</span></h2>
-    <p>Quer comprar uma bike, tirar dúvida ou solicitar manutenção? Preencha abaixo e entraremos em contato em até 24h.</p>
-  </div>
+            <div class="question">
+                <label>Nota para o Aplicativo (1 a 5)</label>
+                <select name="entry.1016399091" required>
+                    <option value="5">5 - Excelente</option>
+                    <option value="4">4 - Muito Bom</option>
+                    <option value="3">3 - Regular</option>
+                    <option value="2">2 - Precisa Melhorar</option>
+                    <option value="1">1 - Ruim</option>
+                </select>
+            </div>
 
-  <!-- ── Form card ── -->
-  <div class="form-card">
+            <div class="question">
+                <label>Descreva sua Experiência</label>
+                <input type="text" name="entry.1160682750" placeholder="Ex: EXEMPLO_EXPERIENCIA" required>
+            </div>
 
-    <!-- Section: dados pessoais -->
-    <div class="form-section-label">01 — Dados pessoais</div>
-    <div class="form-body">
+            <div class="question">
+                <label>Você indicaria nossa loja?</label>
+                <select name="entry.1715074196" required>
+                    <option value="Sim">Sim</option>
+                    <option value="Não indicaria">Não indicaria</option>
+                    <option value="Indicaria, mas com resalvas">Indicaria, mas com resalvas</option>
+                    <option value="Indicaria depois de implementar mudanças">Indicaria depois de implementar mudanças</option>
+                </select>
+            </div>
 
-      <div class="row">
-        <div class="field" id="f-nome">
-          <label>Nome completo <span class="req">*</span></label>
-          <input type="text" id="nome" placeholder="João da Silva" />
-          <span class="error-msg">Informe seu nome.</span>
-        </div>
-        <div class="field" id="f-email">
-          <label>E-mail <span class="req">*</span></label>
-          <input type="email" id="email" placeholder="joao@email.com" />
-          <span class="error-msg">Informe um e-mail válido.</span>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="field" id="f-tel">
-          <label>Telefone / WhatsApp <span class="req">*</span></label>
-          <input type="tel" id="tel" placeholder="(11) 9 0000-0000" />
-          <span class="error-msg">Informe seu telefone.</span>
-        </div>
-        <div class="field">
-          <label>Cidade</label>
-          <input type="text" id="cidade" placeholder="São Paulo" />
-        </div>
-      </div>
-
-      <hr class="form-divider" />
-
+            <button type="submit" class="btn-submit">Enviar Feedback e Marcar esse Golaço!</button>
+        </form>
     </div>
-
-    <!-- Section: interesse -->
-    <div class="form-section-label">02 — Interesse</div>
-    <div class="form-body">
-
-      <div class="field" style="margin-bottom:20px;" id="f-assunto">
-        <label>Assunto <span class="req">*</span></label>
-        <select id="assunto">
-          <option value="">Selecione o motivo do contato…</option>
-          <option value="compra">Quero comprar uma bicicleta</option>
-          <option value="orcamento">Solicitar orçamento</option>
-          <option value="manutencao">Manutenção / revisão</option>
-          <option value="acessorios">Acessórios e peças</option>
-          <option value="duvida">Dúvida geral</option>
-          <option value="outro">Outro</option>
-        </select>
-        <span class="error-msg">Selecione um assunto.</span>
-      </div>
-
-      <div class="field" style="margin-bottom:12px;">
-        <label>Tipo de bicicleta de interesse</label>
-      </div>
-      <div class="bike-types">
-        <button type="button" class="bike-type-btn" onclick="toggleBike(this)">
-          <span class="bt-icon">🚵</span>
-          <span class="bt-label">MTB</span>
-        </button>
-        <button type="button" class="bike-type-btn" onclick="toggleBike(this)">
-          <span class="bt-icon">🚴</span>
-          <span class="bt-label">Speed</span>
-        </button>
-        <button type="button" class="bike-type-btn" onclick="toggleBike(this)">
-          <span class="bt-icon">🚲</span>
-          <span class="bt-label">Urbana</span>
-        </button>
-        <button type="button" class="bike-type-btn" onclick="toggleBike(this)">
-          <span class="bt-icon">🧒</span>
-          <span class="bt-label">Infantil</span>
-        </button>
-      </div>
-
-      <div class="field" style="margin-bottom:14px;">
-        <label>Orçamento estimado</label>
-        <select id="orcamento">
-          <option value="">Selecione uma faixa…</option>
-          <option value="ate1k">Até R$ 1.000</option>
-          <option value="1k3k">R$ 1.000 – R$ 3.000</option>
-          <option value="3k6k">R$ 3.000 – R$ 6.000</option>
-          <option value="6k10k">R$ 6.000 – R$ 10.000</option>
-          <option value="acima10k">Acima de R$ 10.000</option>
-        </select>
-      </div>
-
-      <div class="field" style="margin-bottom:10px;">
-        <label>Como avalia nossa loja?</label>
-        <div class="star-row" id="star-row">
-          <div class="star" onclick="setStars(1)">★</div>
-          <div class="star" onclick="setStars(2)">★</div>
-          <div class="star" onclick="setStars(3)">★</div>
-          <div class="star" onclick="setStars(4)">★</div>
-          <div class="star" onclick="setStars(5)">★</div>
-        </div>
-      </div>
-
-      <hr class="form-divider" />
-
-    </div>
-
-    <!-- Section: mensagem -->
-    <div class="form-section-label">03 — Mensagem</div>
-    <div class="form-body">
-
-      <div class="row full" style="margin-bottom:24px;">
-        <div class="field" id="f-msg">
-          <label>Sua mensagem <span class="req">*</span></label>
-          <textarea id="mensagem" placeholder="Descreva o que você precisa, modelo de interesse, dúvidas, etc…"></textarea>
-          <span class="error-msg">Escreva sua mensagem.</span>
-        </div>
-      </div>
-
-      <div class="check-row">
-        <input type="checkbox" id="lgpd" />
-        <span>Li e aceito a <a href="#">Política de Privacidade</a>. Autorizo o uso dos meus dados para retorno de contato conforme a LGPD.</span>
-      </div>
-
-    </div>
-
-    <!-- Form footer / actions -->
-    <div class="form-footer">
-      <button class="btn-reset" type="button" onclick="resetForm()">Limpar tudo</button>
-      <button class="btn-submit" type="button" onclick="submitForm()">
-        Enviar mensagem
-        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2 9h14M9 3l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Success screen -->
-    <div class="success-screen" id="success-screen">
-      <div class="success-icon">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 16l7 7 13-13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h3>MENSAGEM<br><span>ENVIADA!</span></h3>
-      <p>Recebemos seu contato e responderemos<br>em até 24 horas. Até já! 🚴</p>
-      <button class="btn-novo" onclick="novoContato()">Novo contato</button>
-    </div>
-
-  </div><!-- /form-card -->
-
-</div><!-- /wrapper -->
-
-<script>
-  /* ── Bike type toggle ── */
-  function toggleBike(btn) {
-    btn.classList.toggle('active');
-  }
-
-  /* ── Star rating ── */
-  let starsSelected = 0;
-  function setStars(n) {
-    starsSelected = n;
-    const stars = document.querySelectorAll('.star');
-    stars.forEach((s, i) => s.classList.toggle('lit', i < n));
-  }
-
-  /* ── Telefone mask ── */
-  document.getElementById('tel').addEventListener('input', function () {
-    let v = this.value.replace(/\D/g, '').slice(0, 11);
-    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
-    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
-    else if (v.length > 0) v = '(' + v;
-    this.value = v;
-  });
-
-  /* ── Validation ── */
-  function validate() {
-    let ok = true;
-
-    function check(fieldId, inputId, test) {
-      const field = document.getElementById(fieldId);
-      const val = document.getElementById(inputId).value.trim();
-      if (!test(val)) { field.classList.add('error'); ok = false; }
-      else field.classList.remove('error');
-    }
-
-    check('f-nome',   'nome',     v => v.length >= 2);
-    check('f-email',  'email',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
-    check('f-tel',    'tel',      v => v.replace(/\D/g,'').length >= 10);
-    check('f-assunto','assunto',  v => v !== '');
-    check('f-msg',    'mensagem', v => v.length >= 5);
-
-    if (!document.getElementById('lgpd').checked) {
-      alert('Por favor, aceite a Política de Privacidade para continuar.');
-      ok = false;
-    }
-
-    return ok;
-  }
-
-  /* ── Submit ── */
-  function submitForm() {
-    if (!validate()) return;
-    const formBody = document.querySelector('.form-body');
-    document.querySelectorAll('.form-body, .form-section-label, .form-footer').forEach(el => el.style.display = 'none');
-    document.getElementById('success-screen').style.display = 'block';
-  }
-
-  /* ── Reset ── */
-  function resetForm() {
-    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea').forEach(el => el.value = '');
-    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
-    document.getElementById('lgpd').checked = false;
-    document.querySelectorAll('.bike-type-btn').forEach(b => b.classList.remove('active'));
-    setStars(0);
-    document.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
-  }
-
-  /* ── Novo contato ── */
-  function novoContato() {
-    resetForm();
-    document.getElementById('success-screen').style.display = 'none';
-    document.querySelectorAll('.form-body, .form-section-label, .form-footer').forEach(el => el.style.display = '');
-  }
-</script>
+</div>
 
 </body>
 </html>
