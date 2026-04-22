@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Loja de Bicicletas (Copa Edition)</title>
+    <style>
+        :root {
+            --verde-copa: #009739;
+            --amarelo-copa: #FFDF00;
+            --azul-copa: #002776;
+            --branco: #ffffff;
+            --cinza-claro: #f4f4f9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cinza-claro);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .form-container {
+            background: var(--branco);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--verde-copa);
+        }
+
+        .header-image {
+            width: 100%;
+            height: 200px;
+            background: var(--azul-copa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--amarelo-copa);
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            /* Substituir pela URL da imagem do seu app/copa */
+            background-image: linear-gradient(rgba(0,39,118,0.7), rgba(0,39,118,0.7)), url('https://via.placeholder.com/600x200');
+            background-size: cover;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        h1 { color: var(--azul-copa); font-size: 22px; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+
+        .question { margin-bottom: 25px; }
+        .question label { display: block; font-weight: bold; margin-bottom: 10px; color: #333; }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--verde-copa);
+            outline: none;
+        }
+
+        .app-preview {
+            width: 100%;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #eee;
+        }
+
+        .btn-submit {
+            background-color: var(--verde-copa);
+            color: var(--branco);
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #007a2e;
+            box-shadow: 0 4px 10px rgba(0,151,57,0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <div class="header-image">
+        Rumo ao Hexa com a Bicicleta do Brasil! ⚽🚴
+    </div>
+    
+    <div class="content">
+        <h1>Avaliação da Experiência</h1>
+        <p>Sua opinião é o nosso camisa 10. Ajude-nos a melhorar nosso App!</p>
+
+        <form action="#">
+            <div class="question">
+                <label>Nome do Ciclista</label>
+                <input type="text" placeholder="Como podemos te chamar?" required>
+            </div>
+
+            <div class="question">
+                <label>O que achou desta tela do nosso App?</label>
+                <img src="https://via.placeholder.com/500x250" alt="Preview do App" class="app-preview">
+                <select required>
+                    <option value="">Selecione uma nota</option>
+                    <option value="5">⭐⭐⭐⭐⭐ - Excelente</option>
+                    <option value="4">⭐⭐⭐⭐ - Muito Bom</option>
+                    <option value="3">⭐⭐⭐ - Regular</option>
+                    <option value="2">⭐⭐ - Precisa Melhorar</option>
+                    <option value="1">⭐ - Ruim</option>
+                </select>
+            </div>
+
+            <div class="question">
+                <label>Você indicaria nossa loja?</label>
+                <select required>
+                    <option value="sim">Sim, com certeza!</option>
+                    <option value="nao">Não indicaria no momento</option>
+                    <option value="ressalvas">Indicaria, mas com ressalvas</option>
+                    <option value="mudancas">Indicaria após mudanças sugeridas</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Enviar Feedback e Marcar esse Golaço!</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        Desenvolvido com foco em UX para Ciclistas e Torcedores.
+    </div>
+</div>
+
+</body>
+</html>
